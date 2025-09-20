@@ -2,7 +2,6 @@
 extends MeshInstance3D
 
 @export var cube_size: float = 1.0
-var cube_mesh: ArrayMesh
 
 @export var width: int = 16
 @export var height: int = 16
@@ -18,13 +17,18 @@ var cube_mesh: ArrayMesh
 var offset: Vector3i = Vector3i.ZERO
 
 var voxels = []
-var uvs = [0, 0, 0, 0, 0, 0]
+var uvs = [
+	Vector2(0,0),  # canto inferior esquerdo
+	Vector2(1,0),  # inferior direito
+	Vector2(1,1),  # superior direito
+	Vector2(0,1)   # superior esquerdo
+]
 
 func _ready() -> void:
 	noise.seed = noise_seed
 	noise.noise_type = FastNoiseLite.TYPE_PERLIN
-	noise.frequency = 0.05
-		
+	noise.frequency = 0.01
+	
 	voxels = generate_voxels()
 	if (voxels.size() == 0):
 		return
@@ -32,56 +36,87 @@ func _ready() -> void:
 	generate_mesh(voxels)
 
 func generate_mesh(_voxels):
-	print("TESTE 123")
-	var _faces = []
+	var _surfaces = {
+		1: [], #grass
+		2: [], #dirt
+		3: [], #stone
+	}
 	
 	for x in range(_voxels.size()):
 		for y in range(_voxels[x].size()):
 			for z in range(_voxels[x][y].size()):
 				if _voxels[x][y][z] != 0:
+					var _block_type = _voxels[x][y][z]
+					if _block_type == 0:
+						continue
+						
 					var _position = Vector3(x, y, z) * cube_size
+					var _faces = []
 					
-					if x == 0 or voxels[x-1][y][z] == 0:
+					if x == 0 or _voxels[x-1][y][z] == 0:
 						_faces.append(create_face(Vector3.LEFT, _position, uvs))
 						
-					if x == voxels.size() -1 or voxels[x + 1][y][z] == 0:
+					if x == _voxels.size() -1 or _voxels[x + 1][y][z] == 0:
 						_faces.append(create_face(Vector3.RIGHT, _position, uvs))
 						
-					if y == 0 or voxels[x][y - 1][z] == 0:
+					if y == 0 or _voxels[x][y - 1][z] == 0:
 						_faces.append(create_face(Vector3.DOWN, _position, uvs))
 					
-					if y == voxels[x].size() -1 or voxels[x][y + 1][z] == 0:
+					if y == _voxels[x].size() -1 or _voxels[x][y + 1][z] == 0:
 						_faces.append(create_face(Vector3.UP, _position, uvs))
 					
-					if z == 0 or voxels[x][y][z - 1] == 0:
+					if z == 0 or _voxels[x][y][z - 1] == 0:
 						_faces.append(create_face(Vector3.FORWARD, _position, uvs))
 						
-					if z == voxels[x][y].size() - 1 or voxels[x][y][z + 1] == 0:
+					if z == _voxels[x][y].size() - 1 or _voxels[x][y][z + 1] == 0:
 						_faces.append(create_face(Vector3.BACK, _position, uvs))
+					
+					_surfaces[_block_type] += (_faces)
 	
-	var _vertices = []
-	var _normals = []
-	var _uvs = []
+	var cube_mesh = ArrayMesh.new()
 	
-	for face in _faces:
-		_vertices += face["vertices"]
-		_normals += face["normals"]
-		_uvs += face["uvs"]
-	
-	var _vertex_array = PackedVector3Array(_vertices)
-	var _normal_array = PackedVector3Array(_normals)
-	var _uv_array = PackedVector2Array(_uvs)
-	
-	var _arrays = []
-	_arrays.resize(Mesh.ARRAY_MAX)
-	_arrays[Mesh.ARRAY_VERTEX] = _vertex_array
-	_arrays[Mesh.ARRAY_NORMAL] = _normal_array
-	_arrays[Mesh.ARRAY_TEX_UV] = _uv_array
-	
-	cube_mesh = ArrayMesh.new()
-	cube_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _arrays)
+	for _block_type in _surfaces.keys():
+		var _faces = _surfaces[_block_type]
+		if _faces.size() == 0:
+			continue
+
+		var _vertices = []
+		var _normals = []
+		var _uvs = []
+
+		for _face in _faces:
+			_vertices += _face["vertices"]
+			_normals += _face["normals"]
+			_uvs += _face["uvs"]
+
+		var _arrays = []
+		_arrays.resize(Mesh.ARRAY_MAX)
+		_arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array(_vertices)
+		_arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array(_normals)
+		_arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array(_uvs)
+
+		cube_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, _arrays)
+
+		var mat = StandardMaterial3D.new()
+		match _block_type:
+			1: mat.albedo_texture = load("res://textures/grass.png")
+			2: mat.albedo_texture = load("res://textures/dirt.png")
+			3: mat.albedo_texture = load("res://textures/stone.png")
+
+		cube_mesh.surface_set_material(cube_mesh.get_surface_count()-1, mat)
 	
 	self.mesh = cube_mesh
+	
+	# --- adicionar colisão ---
+	var static_body = StaticBody3D.new()
+	add_child(static_body)
+
+	var collision_shape = CollisionShape3D.new()
+	static_body.add_child(collision_shape)
+
+	var concave_shape = ConcavePolygonShape3D.new()
+	concave_shape.data = cube_mesh.get_faces()
+	collision_shape.shape = concave_shape
 
 func generate_voxels() -> Array:
 	var _array = []
@@ -102,7 +137,6 @@ func generate_voxels() -> Array:
 			var height_val = int(noise.get_noise_2d(wx, wz) * height/2 + height/2)
 			
 			for y in height:
-							
 				var global_pos = Vector3(
 					offset.x * width + x,
 					offset.y * height + y,
@@ -111,12 +145,17 @@ func generate_voxels() -> Array:
 				
 				var dx = global_pos.x - center_world.x
 				var dz = global_pos.z - center_world.z
-				var dist = sqrt(dx*dx + dz*dz)
+				var dist = sqrt(dx * dx + dz * dz)
 				
 				if y > height_val || dist > radius_world:
 					_array[x][y][z] = 0
 				else:
-					_array[x][y][z] = 1
+						if y == height_val:
+							_array[x][y][z] = 1  # grass
+						elif y >= height_val - 3:
+							_array[x][y][z] = 2  # dirt
+						else:
+							_array[x][y][z] = 3  # stone
 	
 	return _array
 

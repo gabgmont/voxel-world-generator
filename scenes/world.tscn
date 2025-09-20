@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://bpp0y8c2yaxk0"]
+
+[ext_resource type="Script" uid="uid://bh0pj5rjswi7h" path="res://scripts/world.gd" id="1_rwgxs"]
+[ext_resource type="PackedScene" uid="uid://dccxqo4gnl6md" path="res://scenes/chunk/chunk.tscn" id="2_4wyf3"]
+[ext_resource type="PackedScene" uid="uid://ev70ht4orq5o" path="res://scenes/entities/player.tscn" id="3_4wyf3"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fj7yv"]
+noise_type = 3
+seed = 214
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_rwgxs")
+chunk_scene = ExtResource("2_4wyf3")
+world_size = Vector3i(8, 1, 8)
+noise_seed = 214
+noise = SubResource("FastNoiseLite_fj7yv")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 73.97589, 0)
+shadow_enabled = true
+
+[node name="Player" parent="." instance=ExtResource("3_4wyf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96.168846, 26.357304, 50.318268)
