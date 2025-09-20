@@ -21,11 +21,10 @@ func _physics_process(delta: float) -> void:
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var direction := (transform.basis * camera.global_basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	
-	creature.look_at(global_transform.origin + Vector3(direction.x * -1, 0, direction.z * -1), Vector3.UP)
-	
 	if direction:
 		velocity.x = direction.x * SPEED
 		velocity.z = direction.z * SPEED
+		creature.look_at(global_transform.origin + Vector3(direction.x * -1, 0, direction.z * -1), Vector3.UP)
 	else:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
