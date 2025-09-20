@@ -1,7 +1,7 @@
 @tool
 extends MeshInstance3D
 
-@export var cube_size: float = 1.0
+@export var cube_size: float = 0.5
 
 @export var width: int = 16
 @export var height: int = 16
@@ -99,9 +99,9 @@ func generate_mesh(_voxels):
 
 		var mat = StandardMaterial3D.new()
 		match _block_type:
-			1: mat.albedo_texture = load("res://textures/grass.png")
-			2: mat.albedo_texture = load("res://textures/dirt.png")
-			3: mat.albedo_texture = load("res://textures/stone.png")
+			1: mat.albedo_texture = load("res://textures/terrain/stone_2.png")
+			2: mat.albedo_texture = load("res://textures/terrain/stone_3.png")
+			3: mat.albedo_texture = load("res://textures/terrain/stone_1.png")
 
 		cube_mesh.surface_set_material(cube_mesh.get_surface_count()-1, mat)
 	
@@ -150,12 +150,12 @@ func generate_voxels() -> Array:
 				if y > height_val || dist > radius_world:
 					_array[x][y][z] = 0
 				else:
-						if y == height_val:
-							_array[x][y][z] = 1  # grass
-						elif y >= height_val - 3:
-							_array[x][y][z] = 2  # dirt
-						else:
-							_array[x][y][z] = 3  # stone
+					if y == height_val:
+						_array[x][y][z] = 1  # grass
+					elif y >= height_val - 3:
+						_array[x][y][z] = 2  # dirt
+					else:
+						_array[x][y][z] = 3  # stone
 	
 	return _array
 
