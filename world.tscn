@@ -1,0 +1,14 @@
+[gd_scene load_steps=4 format=3 uid="uid://bpp0y8c2yaxk0"]
+
+[ext_resource type="Script" uid="uid://bh0pj5rjswi7h" path="res://world.gd" id="1_f3sb7"]
+[ext_resource type="PackedScene" uid="uid://dccxqo4gnl6md" path="res://chunk.tscn" id="2_fj7yv"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_fj7yv"]
+noise_type = 3
+frequency = 0.05
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_f3sb7")
+chunk_scene = ExtResource("2_fj7yv")
+world_size = Vector3i(8, 1, 8)
+noise = SubResource("FastNoiseLite_fj7yv")

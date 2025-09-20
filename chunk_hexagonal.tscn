@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4kqdem1i87h2"]
+
+[ext_resource type="Script" uid="uid://7do211gqvk8g" path="res://chunk_hexagonal.gd" id="1_kdh3y"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_k0foq"]
+
+[node name="Chunk" type="MeshInstance3D"]
+script = ExtResource("1_kdh3y")
+noise = SubResource("FastNoiseLite_k0foq")
