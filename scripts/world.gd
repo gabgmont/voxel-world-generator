@@ -9,6 +9,9 @@ extends Node3D
 @export var cube_size: float = 2
 
 func _ready():
+	generate_terrain()
+
+func generate_terrain():
 	var center = Vector3(world_size.x * chunk_size / 2.0, 0, world_size.z * chunk_size / 2.0)
 	var radius = min(world_size.x * chunk_size, world_size.z * chunk_size) / 2.0
 	

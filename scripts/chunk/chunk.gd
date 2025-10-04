@@ -12,7 +12,13 @@ extends MeshInstance3D
 
 @export var noise: FastNoiseLite
 @export var noise_seed: int = 12345
-@export var cut_off: float = 0.5
+
+@export var stone_scenes: Array[PackedScene] = [
+	load("res://scenes/props/rock_a.tscn"),
+	load("res://scenes/props/rock_b.tscn"),
+	load("res://scenes/props/rocks_a.tscn"),
+	load("res://scenes/props/rocks_b.tscn"),
+] # suas 4 cenas de pedras
 
 var offset: Vector3i = Vector3i.ZERO
 
@@ -34,6 +40,7 @@ func _ready() -> void:
 		return
 		
 	generate_mesh(voxels)
+	spawn_stones(voxels)
 
 func generate_mesh(_voxels):
 	var _surfaces = {
@@ -134,20 +141,10 @@ func generate_voxels() -> Array:
 		for z in depth:
 			var wx = x + offset.x * width
 			var wz = z + offset.z * depth
-			var height_val = int(noise.get_noise_2d(wx, wz) * height/2 + height/2)
+			var height_val = int(noise.get_noise_2d(wx, wz) * height/2.0 + height/2.0)
 			
-			for y in height:
-				var global_pos = Vector3(
-					offset.x * width + x,
-					offset.y * height + y,
-					offset.z * depth + z
-				)
-				
-				var dx = global_pos.x - center_world.x
-				var dz = global_pos.z - center_world.z
-				var dist = sqrt(dx * dx + dz * dz)
-				
-				if y > height_val || dist > radius_world:
+			for y in height:				
+				if y > height_val || is_outsite_island(x, y, z):
 					_array[x][y][z] = 0
 				else:
 					if y == height_val:
@@ -158,7 +155,22 @@ func generate_voxels() -> Array:
 						_array[x][y][z] = 3  # stone
 	
 	return _array
-
+	
+func is_outsite_island(x: float, y: float, z: float) -> bool:
+	var global_pos = Vector3(
+		offset.x * width + x,
+		offset.y * height + y,
+		offset.z * depth + z
+	)
+				
+	var dx = global_pos.x - center_world.x
+	var dz = global_pos.z - center_world.z
+	var dist = sqrt(dx * dx + dz * dz)
+	
+	var cut_off = radius_world * (1 + noise.get_noise_2d(dx, dz)) * 0.75
+		
+	return dist > cut_off
+	
 func create_face(_direction: Vector3, _position: Vector3, _uv_coords: Array) -> Dictionary:
 	var _vertices = []
 	var _normals = []
@@ -236,3 +248,35 @@ func create_face(_direction: Vector3, _position: Vector3, _uv_coords: Array) -> 
 			_uvs[0], _uvs[2], _uvs[3]
 		]
 	}
+
+func spawn_stones(_voxels):
+	randomize()
+	
+	for x in range(_voxels.size()):
+		for y in range(_voxels[x].size()):
+			for z in range(_voxels[x][y].size()):
+				if _voxels[x][y][z] == 1: # grass
+					# Verifica se é a superfície (sem nada em cima)
+					if y == _voxels[x].size() - 1 or _voxels[x][y+1][z] == 0:
+						var rand = randf()
+						var scene = null
+						print(rand)
+						if rand <= 0.0002:
+							scene = stone_scenes[3]
+						elif rand <= 0.0005:
+							scene = stone_scenes[2]
+						elif rand <= 0.001:
+							scene = stone_scenes[1]
+						elif rand <= 0.002:
+							scene = stone_scenes[0]
+							
+						if scene != null:
+							var stone = scene.instantiate()
+							
+							# Posição em coordenadas do mundo
+							stone.position = Vector3(x, y + 0.5, z) * cube_size
+							
+							# Rotação aleatória no Y
+							stone.rotate_y(randf_range(0, TAU))
+							
+							add_child(stone)

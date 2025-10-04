@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://b4448spepkw2d"]
+
+[ext_resource type="PackedScene" uid="uid://buofv73spn4li" path="res://assets/props/rock_A.fbx" id="1_1ooci"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vpilx"]
+size = Vector3(0.5235596, 0.27087402, 0.44033813)
+
+[node name="RockA" type="StaticBody3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="rock_A" parent="." instance=ExtResource("1_1ooci")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.050842285, 0.1251831, 0.017990112)
+shape = SubResource("BoxShape3D_vpilx")

@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://bn8ogydqdd661"]
+
+[ext_resource type="PackedScene" uid="uid://bug5l5p05vbcq" path="res://assets/props/cargo_A.fbx" id="1_7qhle"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_prkxx"]
+size = Vector3(0.5109863, 0.5031738, 0.48962402)
+
+[node name="CargoA" type="StaticBody3D"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
+
+[node name="cargo_A" parent="." instance=ExtResource("1_7qhle")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0008544922, 0.25109863, 0.009460449)
+shape = SubResource("BoxShape3D_prkxx")

@@ -1,0 +1,63 @@
+[gd_scene load_steps=4 format=3 uid="uid://h42n52d638nr"]
+
+[ext_resource type="PackedScene" uid="uid://bx340gqr28wxd" path="res://assets/creatures/RogueHooded.fbx" id="1_a0r5j"]
+[ext_resource type="Texture2D" uid="uid://bmhq4cyod277o" path="res://textures/creatures/rogue_texture.png" id="2_e2rou"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5g3yi"]
+albedo_texture = ExtResource("2_e2rou")
+
+[node name="RogueHooded" instance=ExtResource("1_a0r5j")]
+
+[node name="Rogue_Cape" parent="Rig/Skeleton3D" index="0"]
+transform = Transform3D(1, 2.0194838e-28, 1.4210855e-14, -6.2117594e-22, 0.99999994, 4.3711385e-08, -1.4210855e-14, -4.371138e-08, 1, 1.4154976e-28, 0.9726289, -4.2514955e-08)
+bone_idx = 3
+
+[node name="Rogue_Cape" parent="Rig/Skeleton3D/Rogue_Cape" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5g3yi")
+
+[node name="Knife_Offhand" parent="Rig/Skeleton3D" index="1"]
+transform = Transform3D(-0.9999991, -5.801525e-07, 1.8684786e-06, 1.9105123e-06, -2.9978423e-07, 0.9999997, -5.2799885e-07, 0.9999992, 2.604749e-07, 0.88313246, 1.04926, -6.7993216e-07)
+bone_idx = 8
+
+[node name="Knife_Offhand" parent="Rig/Skeleton3D/Knife_Offhand" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5g3yi")
+
+[node name="1H_Crossbow" parent="Rig/Skeleton3D" index="2"]
+transform = Transform3D(-0.9999991, 5.205474e-07, -6.465839e-07, -7.357432e-07, -5.482865e-07, 0.99999976, 4.3859188e-07, 0.9999992, 5.3053634e-07, -0.8831325, 1.0492609, -7.5628986e-07)
+visible = false
+bone_idx = 13
+
+[node name="Throwable" parent="Rig/Skeleton3D" index="3"]
+transform = Transform3D(-0.9999991, 5.205474e-07, -6.465839e-07, -7.357432e-07, -5.482865e-07, 0.99999976, 4.3859188e-07, 0.9999992, 5.3053634e-07, -0.8831325, 1.0492609, -7.5628986e-07)
+bone_idx = 13
+
+[node name="Throwable" parent="Rig/Skeleton3D/Throwable" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5g3yi")
+
+[node name="Knife" parent="Rig/Skeleton3D" index="4"]
+transform = Transform3D(-0.9999991, 5.205474e-07, -6.465839e-07, -7.357432e-07, -5.482865e-07, 0.99999976, 4.3859188e-07, 0.9999992, 5.3053634e-07, -0.8831325, 1.0492609, -7.5628986e-07)
+visible = false
+bone_idx = 13
+
+[node name="2H_Crossbow" parent="Rig/Skeleton3D" index="5"]
+transform = Transform3D(-0.9999991, 5.205474e-07, -6.465839e-07, -7.357432e-07, -5.482865e-07, 0.99999976, 4.3859188e-07, 0.9999992, 5.3053634e-07, -0.8831325, 1.0492609, -7.5628986e-07)
+visible = false
+bone_idx = 13
+
+[node name="Rogue_ArmLeft" parent="Rig/Skeleton3D" index="6"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5g3yi")
+
+[node name="Rogue_ArmRight" parent="Rig/Skeleton3D" index="7"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5g3yi")
+
+[node name="Rogue_Body" parent="Rig/Skeleton3D" index="8"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5g3yi")
+
+[node name="Rogue_LegLeft" parent="Rig/Skeleton3D" index="9"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5g3yi")
+
+[node name="Rogue_LegRight" parent="Rig/Skeleton3D" index="10"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5g3yi")
+
+[node name="Rogue_Head_Hooded" parent="Rig/Skeleton3D" index="11"]
+surface_material_override/0 = SubResource("StandardMaterial3D_5g3yi")

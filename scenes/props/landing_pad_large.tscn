@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgj15uidkcgwl"]
+
+[ext_resource type="PackedScene" uid="uid://cv4n5cdnulhtc" path="res://assets/props/landingpad_large.fbx" id="1_xfw3j"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1fyme"]
+size = Vector3(2.4925842, 0.51586914, 2.5002747)
+
+[node name="LandingPadLarge" type="StaticBody3D"]
+
+[node name="landingpad_large" parent="." instance=ExtResource("1_xfw3j")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0074005127, 0.23791504, 0.0029144287)
+shape = SubResource("BoxShape3D_1fyme")

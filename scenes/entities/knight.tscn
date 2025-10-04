@@ -1,7 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://2xi81h4cxxaf"]
+[gd_scene load_steps=5 format=3 uid="uid://2xi81h4cxxaf"]
 
 [ext_resource type="PackedScene" uid="uid://c52052wxunbuw" path="res://assets/creatures/Knight.fbx" id="1_4wlph"]
-[ext_resource type="Script" uid="uid://boql6kslxwynn" path="res://scenes/entities/knight.gd" id="2_c8plb"]
+[ext_resource type="Script" uid="uid://boql6kslxwynn" path="res://scripts/entities/knight.gd" id="2_c8plb"]
+[ext_resource type="Texture2D" uid="uid://c8ftrtndkwii7" path="res://textures/creatures/knight_texture.png" id="3_popcx"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kyoj4"]
+albedo_texture = ExtResource("3_popcx")
 
 [node name="Knight" instance=ExtResource("1_4wlph")]
 script = ExtResource("2_c8plb")
@@ -84,9 +88,15 @@ bone_idx = 8
 transform = Transform3D(6.1992233e-07, 0.26286307, 0.96483254, 0.99999905, -9.148238e-14, -2.5249255e-08, 3.0341232e-07, 0.96483237, -0.2628629, 0.50776815, 0.63670504, -0.018521182)
 bone_idx = 8
 
+[node name="1H_Sword_Offhand" parent="Rig/Skeleton3D/1H_Sword_Offhand" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_kyoj4")
+
 [node name="2H_Sword" parent="Rig/Skeleton3D" index="6"]
 transform = Transform3D(5.438736e-07, -0.1498948, -0.9887016, -0.9999993, 5.364417e-07, -2.5249276e-08, 2.959938e-07, 0.9887011, -0.14989477, -0.49106103, 0.6410296, 0.10659559)
 bone_idx = 13
+
+[node name="2H_Sword" parent="Rig/Skeleton3D/2H_Sword" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_kyoj4")
 
 [node name="1H_Sword" parent="Rig/Skeleton3D" index="7"]
 transform = Transform3D(5.438736e-07, -0.1498948, -0.9887016, -0.9999993, 5.364417e-07, -2.5249276e-08, 2.959938e-07, 0.9887011, -0.14989477, -0.49106103, 0.6410296, 0.10659559)
@@ -96,3 +106,24 @@ bone_idx = 13
 [node name="Knight_Helmet" parent="Rig/Skeleton3D" index="8"]
 transform = Transform3D(0.9997204, -1.4014339e-09, 0.023646597, 3.5978864e-10, 0.99999994, 4.4054858e-08, -0.023646597, -4.4034028e-08, 0.9997204, -4.3038537e-09, 1.2278259, -5.3669964e-08)
 bone_idx = 14
+
+[node name="Knight_Helmet" parent="Rig/Skeleton3D/Knight_Helmet" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_kyoj4")
+
+[node name="Knight_ArmLeft" parent="Rig/Skeleton3D" index="9"]
+surface_material_override/0 = SubResource("StandardMaterial3D_kyoj4")
+
+[node name="Knight_ArmRight" parent="Rig/Skeleton3D" index="10"]
+surface_material_override/0 = SubResource("StandardMaterial3D_kyoj4")
+
+[node name="Knight_Body" parent="Rig/Skeleton3D" index="11"]
+surface_material_override/0 = SubResource("StandardMaterial3D_kyoj4")
+
+[node name="Knight_Head" parent="Rig/Skeleton3D" index="12"]
+surface_material_override/0 = SubResource("StandardMaterial3D_kyoj4")
+
+[node name="Knight_LegLeft" parent="Rig/Skeleton3D" index="13"]
+surface_material_override/0 = SubResource("StandardMaterial3D_kyoj4")
+
+[node name="Knight_LegRight" parent="Rig/Skeleton3D" index="14"]
+surface_material_override/0 = SubResource("StandardMaterial3D_kyoj4")
